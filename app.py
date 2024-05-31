@@ -11,6 +11,7 @@ db.init_app(app)
 app.register_blueprint(auth.bp)
 app.register_blueprint(projects.bp)
 
+# app health check
 @app.route('/ping', methods=['GET'])
 def ping():
     return {"message": "pong"}, 200
