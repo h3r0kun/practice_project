@@ -1,5 +1,6 @@
 import os
 
+# db connection
 class Config:
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', 'postgresql://postgres:tamerlan@localhost/mydb')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
