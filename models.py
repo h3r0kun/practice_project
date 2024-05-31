@@ -3,6 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
 
+# projects table
 class Projects(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
@@ -10,6 +11,7 @@ class Projects(db.Model):
     manager = db.Column(db.String(255)) #db.ForeignKey('worker.id'), nullable=False)
     start_date = db.Column(db.DateTime, nullable=False)
 
+# tasks table
 class Tasks(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
@@ -20,20 +22,23 @@ class Tasks(db.Model):
     status_id = db.Column(db.Integer, db.ForeignKey('status.id'), nullable=False)
     worker_id = db.Column(db.Integer, db.ForeignKey('worker.id'), nullable=False)
 
+# workers table
 class Workers(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     title = db.Column(db.String(255))
-    login = db.Column(db.String(32), unique=True, nullable=False)
-    password = db.Column(db.String(32), nullable=False)
+    login = db.Column(db.String(100), unique=True, nullable=False)
+    password = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
 
+# password functions for auth.py
     def set_password(self, psswrd):
         self.password = generate_password_hash(psswrd)
 
     def check_password(self, psswrd):
         return check_password_hash(self.password_hash, psswrd)
 
+# files table
 class Files(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     path = db.Column(db.String(255), nullable=False)
@@ -41,11 +46,13 @@ class Files(db.Model):
     description = db.Column(db.Text)
     task_id = db.Column(db.Integer, db.ForeignKey('task.id'), nullable=False)
 
+# comments table
 class Comments(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.Text, nullable=False)
     task_id = db.Column(db.Integer, db.ForeignKey('task.id'), nullable=False)
 
+# status table
 class Status(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     status = db.Column(db.String(255), nullable=False)
