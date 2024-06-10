@@ -30,3 +30,19 @@ def handle_generic_error(e):
             "description": "An unexpected error occurred."
         }
     }), 500
+class CustomError(Exception):
+    def __init__(self, message):
+        super().__init__(message)
+        self.message = message
+
+def handle_custom_error(e):
+    return jsonify({
+        "error": {
+            "code": 400,
+            "name": "Custom Error",
+            "description": e.message
+        }
+    }), 400
+
+# Add to error handler registration
+app.register_error_handler(CustomError, handle_custom_error)
