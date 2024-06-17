@@ -5,26 +5,29 @@ db = SQLAlchemy()
 
 # projects table
 class Projects(db.Model):
+    __tablename__ = "Projects"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text)
-    manager = db.Column(db.String(255)) #db.ForeignKey('worker.id'), nullable=False)
+    manager_id = db.Column(db.Integer, db.ForeignKey('Workers.id'), nullable=False)
     start_date = db.Column(db.DateTime, nullable=False)
 
 # tasks table
 class Tasks(db.Model):
+    __tablename__ = "Tasks"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text)
-    project_id = db.Column(db.Integer, db.ForeignKey('project.id'), nullable=False)
+    project_id = db.Column(db.Integer, db.ForeignKey('Projects.id'), nullable=False)
     start_date = db.Column(db.DateTime)
     end_date = db.Column(db.DateTime)
-    status_id = db.Column(db.Integer, db.ForeignKey('status.id'), nullable=False)
-    worker_id = db.Column(db.Integer, db.ForeignKey('worker.id'), nullable=False)
+    status_id = db.Column(db.Integer, db.ForeignKey('Status.id'), nullable=False)
+    worker_id = db.Column(db.Integer, db.ForeignKey('Workers.id'), nullable=False)
 
 # workers table
 class Workers(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    __tablename__ = "Workers"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255), nullable=False)
     title = db.Column(db.String(255))
     login = db.Column(db.String(100), unique=True, nullable=False)
@@ -40,19 +43,22 @@ class Workers(db.Model):
 
 # files table
 class Files(db.Model):
+    __tablename__ = "Files"
     id = db.Column(db.Integer, primary_key=True)
     path = db.Column(db.String(255), nullable=False)
     type = db.Column(db.String(10))
     description = db.Column(db.Text)
-    task_id = db.Column(db.Integer, db.ForeignKey('task.id'), nullable=False)
+    task_id = db.Column(db.Integer, db.ForeignKey('Tasks.id'), nullable=False)
 
 # comments table
 class Comments(db.Model):
+    __tablename__ = "Comments"
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.Text, nullable=False)
-    task_id = db.Column(db.Integer, db.ForeignKey('task.id'), nullable=False)
+    task_id = db.Column(db.Integer, db.ForeignKey('Tasks.id'), nullable=False)
 
 # status table
 class Status(db.Model):
+    __tablename__ = "Status"
     id = db.Column(db.Integer, primary_key=True)
     status = db.Column(db.String(255), nullable=False)
