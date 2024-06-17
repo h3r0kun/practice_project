@@ -6,10 +6,12 @@ from pydantic import ValidationError
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
+
 # registration
 @bp.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
+    print("Received data:", data)
     try:
         worker_data = WorkerSchema(**data)
     except ValidationError as err:
@@ -26,6 +28,7 @@ def register():
     db.session.commit()
     return jsonify({"message": "Worker registered successfully"}), 201
 
+
 # change password
 @bp.route('/change-password', methods=['POST'])
 def change_password():
@@ -36,6 +39,7 @@ def change_password():
         db.session.commit()
         return jsonify({"message": "Password updated successfully"}), 200
     return jsonify({"message": "Invalid credentials"}), 400
+
 
 # basic authorization
 def basic_auth_required(f):
@@ -50,4 +54,5 @@ def basic_auth_required(f):
             return jsonify({"message": "Invalid credentials"}), 401
 
         return f(worker, *args, **kwargs)
+
     return decorated
