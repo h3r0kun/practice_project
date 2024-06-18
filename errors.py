@@ -1,5 +1,7 @@
 from flask import jsonify
 from werkzeug.exceptions import HTTPException
+import logging
+
 
 def handle_http_exception(e):
     response = e.get_response()
@@ -9,7 +11,7 @@ def handle_http_exception(e):
             "name": e.name,
             "description": e.description
         }
-    })
+    }).get_data(as_text=True)  # Convert to string
     response.content_type = "application/json"
     return response
 
@@ -23,6 +25,8 @@ def handle_validation_error(e):
     }), 400
 
 def handle_generic_error(e):
+    logger = logging.getLogger(__name__)
+    logger.exception("Unhandled exception: %s", e)
     return jsonify({
         "error": {
             "code": 500,
@@ -30,19 +34,3 @@ def handle_generic_error(e):
             "description": "An unexpected error occurred."
         }
     }), 500
-class CustomError(Exception):
-    def __init__(self, message):
-        super().__init__(message)
-        self.message = message
-
-def handle_custom_error(e):
-    return jsonify({
-        "error": {
-            "code": 400,
-            "name": "Custom Error",
-            "description": e.message
-        }
-    }), 400
-
-# Add to error handler registration
-app.register_error_handler(CustomError, handle_custom_error)
