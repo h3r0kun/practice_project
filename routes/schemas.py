@@ -11,6 +11,10 @@ class ProjectSchema(BaseModel):
     manager: constr(min_length=1, max_length=255)
     start_date: datetime
 
+    class Config:
+        from_attributes = True
+
+
 # Task schema
 class TaskSchema(BaseModel):
     id: Optional[int]
@@ -21,6 +25,7 @@ class TaskSchema(BaseModel):
     end_date: Optional[datetime]
     status_id: conint(gt=0)
     worker_id: conint(gt=0)
+
 
 # Worker schema
 class WorkerSchema(BaseModel):
@@ -45,6 +50,7 @@ class WorkerSchema(BaseModel):
     class Config:
         from_attributes = True
 
+
 # File schema
 class FileSchema(BaseModel):
     id: Optional[int]
@@ -53,11 +59,13 @@ class FileSchema(BaseModel):
     description: Optional[str]
     task_id: conint(gt=0)
 
+
 # Comment schema
 class CommentSchema(BaseModel):
     id: Optional[int]
     text: constr(min_length=1)
     task_id: conint(gt=0)
+
 
 # Status schema
 class StatusSchema(BaseModel):
