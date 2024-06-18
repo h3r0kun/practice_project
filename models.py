@@ -7,7 +7,7 @@ db = SQLAlchemy()
 # projects table
 class Projects(db.Model):
     __tablename__ = "projects"
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text)
     manager_id = db.Column(db.Integer, db.ForeignKey('workers.id'), nullable=False)
@@ -17,7 +17,7 @@ class Projects(db.Model):
 # tasks table
 class Tasks(db.Model):
     __tablename__ = "tasks"
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text)
     project_id = db.Column(db.Integer, db.ForeignKey('projects.id'), nullable=False)
@@ -34,21 +34,21 @@ class Workers(db.Model):
     name = db.Column(db.String(255), nullable=False)
     title = db.Column(db.String(255))
     login = db.Column(db.String(100), unique=True, nullable=False)
-    password = db.Column(db.String(100), nullable=False)
+    password = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
 
     # password functions for auth.py
-    def set_password(self, psswrd):
-        self.password = generate_password_hash(psswrd)
+    def set_password(self, plaintext_password):
+        self.password = generate_password_hash(plaintext_password)
 
-    def check_password(self, psswrd):
-        return check_password_hash(self.password_hash, psswrd)
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
 
 
 # files table
 class Files(db.Model):
     __tablename__ = "files"
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     path = db.Column(db.String(255), nullable=False)
     type = db.Column(db.String(10))
     description = db.Column(db.Text)
@@ -58,7 +58,7 @@ class Files(db.Model):
 # comments table
 class Comments(db.Model):
     __tablename__ = "comments"
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     text = db.Column(db.Text, nullable=False)
     task_id = db.Column(db.Integer, db.ForeignKey('tasks.id'), nullable=False)
 
@@ -66,5 +66,5 @@ class Comments(db.Model):
 # status table
 class Status(db.Model):
     __tablename__ = "status"
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     status = db.Column(db.String(255), nullable=False)
